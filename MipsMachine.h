@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdint.h>
-
+#include "VirtualMemory.h"
 
 typedef struct _Registers{
 	int32_t gpregisters[32];
@@ -20,3 +20,7 @@ typedef struct _MipsMachine{
 	VirtualMem* mem;
 	int limit;
 } MipsMachine;
+
+MipsMachine* machine_create();
+
+

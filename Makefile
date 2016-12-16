@@ -1,8 +1,13 @@
 CC=clang
 CFLAGS= -g -Wall
-LFLAGS = -lMipsMachine.h
+SRC = mips.c MipsMachine.c
+OBJ = $(SRC: .c=.o)
+OUT = mips
 
-TARGET = mips
-all: $(TARGET)
-$(TARGET):$(TARGET).c
-	$(CC) $(CLFAGS) -o $(TARGET) $(TARGET).c $(LFLAGS)
+$(OUT): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(OUT)
+
+.c.o: $(CC) $(CFLAGS) $< -o $@
+
+clean:
+	-@rm -rf $(OBJ) $(OUT)
