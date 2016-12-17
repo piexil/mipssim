@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "VirtualMemory.h"
+#include "Common.h"
 
 typedef struct _Registers{
 	int32_t gpregisters[32];
@@ -21,6 +22,8 @@ typedef struct _MipsMachine{
 	int limit;
 } MipsMachine;
 
-MipsMachine* machine_create();
+void (*oplookup[20])(_INST_WORD);
 
+MipsMachine* machine_create();
+void 	startsim(MipsMachine*,FILE*);
 

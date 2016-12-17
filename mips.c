@@ -8,10 +8,15 @@ int main(int argc, char* argv[]){
 	FILE* fin = NULL;
 	if(argc <= 1){
 		printf("Usage: %s filename\n",argv[0]);
+		return 1;
 	}
-	printf("Starting simulation");
+	if((fin = fopen(argv[1], "rb")) == NULL){
+		printf("File %s not found\n", argv[1]);
+		return 1;
+	}
+	printf("Starting simulation\n");
 	MipsMachine* machine = machine_create();
 	if(machine){
-	
+		startsim(machine, fin);
 	}
 }
