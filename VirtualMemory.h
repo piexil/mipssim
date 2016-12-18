@@ -1,3 +1,5 @@
+#ifndef VIRTUALMEMORY_H
+#define VIRTUALMEMORY_H
 #include "Common.h"
 typedef struct _VirtualMemory{
 	union{
@@ -10,4 +12,4 @@ typedef struct _VirtualMemory{
 VirtualMem* mem_Create();
 void vmem_set_word(VirtualMem* vm, int position, _DATA_WORD val);
 _DATA_WORD vmem_get_word(VirtualMem* vm, int position);
-
+#endif

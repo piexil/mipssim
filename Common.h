@@ -1,6 +1,8 @@
-typedef short int _DATA_WORD;
-typedef unsigned short int _UDATA_WORD;
-typedef short int _INST_WORD;
+#ifndef COMMON_H
+#define COMMON_H
+typedef long int _DATA_WORD;
+typedef unsigned long int _UDATA_WORD;
+typedef long int _INST_WORD;
 
 //opcode definitions
 //R_TYPE
@@ -26,5 +28,6 @@ typedef short int _INST_WORD;
 #define	_ADDI	0x8
 //J_TYPE
 #define	_J	0x2
-#define	JAL	0x3
+#define	_JAL	0x3
 
+#endif

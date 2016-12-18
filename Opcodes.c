@@ -1,12 +1,17 @@
-#ifndef OPCODES_H
-#define OPCODES_H
-#include "Common.h"
-#include "MipsMachine.h"
+#include "Opcodes.h"
 //standard opcodes
-void rtype(MipsMachine*, _INST_WORD);
-void loadWord(MipsMachine*, _INST_WORD);
-void storeWord(MipsMachine*, _INST_WORD);
-void andI(MipsMachine*, _INST_WORD);
+void rtype(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void loadWord(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void storeWord(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void andI(MipsMachine* mac, _INST_WORD opcode){
+
+}
 void orI(MipsMachine*, _INST_WORD);
 void luI(MipsMachine*, _INST_WORD);
 void branchEQ(MipsMachine*, _INST_WORD);
@@ -25,4 +30,4 @@ void sll(MipsMachine*, _INST_WORD);
 void srl(MipsMachine*, _INST_WORD);
 void jumpReg(MipsMachine*, _INST_WORD);
 void sysCall(MipsMachine*, _INST_WORD);
-#endif
+

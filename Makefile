@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS= -g -Wall
-SRC = mips.c MipsMachine.c
+SRC = mips.c MipsMachine.c Opcodes.c 
 OBJ = $(SRC: .c=.o)
 OUT = mips
 

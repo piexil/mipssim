@@ -1,8 +1,10 @@
+#ifndef MIPSMACHINE_H
+#define MIPSMACHINE_H
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdio.h>
 #include "VirtualMemory.h"
 #include "Common.h"
-
 typedef struct _Registers{
 	int32_t gpregisters[32];
 	int32_t pc;
@@ -22,8 +24,8 @@ typedef struct _MipsMachine{
 	int limit;
 } MipsMachine;
 
-void (*oplookup[20])(_INST_WORD);
+void (*oplookup[64])(MipsMachine*,_INST_WORD);
 
 MipsMachine* machine_create();
 void 	startsim(MipsMachine*,FILE*);
-
+#endif
