@@ -1,8 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
-typedef long int _DATA_WORD;
-typedef unsigned long int _UDATA_WORD;
-typedef long int _INST_WORD;
+typedef int _DATA_WORD;
+typedef unsigned int _UDATA_WORD;
+typedef int _INST_WORD;
 
 //opcode definitions
 //R_TYPE
