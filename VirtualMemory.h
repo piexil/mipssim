@@ -2,7 +2,7 @@
 #define VIRTUALMEMORY_H
 #include "Common.h"
 
-int memsize = 67108864; //default to 64MiB ram
+
 typedef struct _VirtualMemory{
 	union{
 		_DATA_WORD* mem; //get mem via word size
@@ -11,7 +11,8 @@ typedef struct _VirtualMemory{
 } VirtualMem;
 
 
-VirtualMem* mem_Create();
+VirtualMem* mem_Create(int byteMemSize);
+void mem_destroy(VirtualMem* vm);
 void vmem_set_word(VirtualMem* vm, int position, _DATA_WORD val);
 _DATA_WORD vmem_get_word(VirtualMem* vm, int position);
 #endif
