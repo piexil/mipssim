@@ -1,8 +1,8 @@
-#include "MipsMachine.h"
-#include "Opcodes.h"
+#include "Common.h""
 MipsMachine* machine_create(){
 	MipsMachine* mac = malloc(sizeof(MipsMachine));
 	mac->rf = malloc(sizeof(RegFile));
+	mac->mem = mem_Create(67108864);
 	return mac;
 }
 void startsim(MipsMachine* machine, FILE* file){
@@ -19,10 +19,11 @@ void startsim(MipsMachine* machine, FILE* file){
 	oplookup[_J] = jump;
 	oplookup[_JAL] = jumpAndLink; 
 	//load file into memory
-
+	
 	//start executing
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
 
 }
+

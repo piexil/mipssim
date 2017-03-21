@@ -1,8 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
-typedef long int _DATA_WORD;
-typedef unsigned long int _UDATA_WORD;
-typedef long int _INST_WORD;
+typedef int _DATA_WORD;
+typedef unsigned int _UDATA_WORD;
+typedef int _INST_WORD;
 
 //opcode definitions
 //R_TYPE
@@ -14,10 +14,10 @@ typedef long int _INST_WORD;
 #define _SLL	0x0
 #define	_SLT	0x2A
 #define	_SRL	0x2
-#define	_JR	0x8
+#define	_JR	    0x8
 #define _TRAP	0xC //aka syscall
 //I_TYPE
-#define _LW	0x23
+#define _LW	    0x23
 #define	_SW 	0x2B
 #define	_ANDI	0xC
 #define _ORI	0xD
@@ -27,7 +27,7 @@ typedef long int _INST_WORD;
 #define	_SLTI	0xA
 #define	_ADDI	0x8
 //J_TYPE
-#define	_J	0x2
+#define	_J	    0x2
 #define	_JAL	0x3
 
 #endif

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "VirtualMemory.h"
 #include "Common.h"
+#include "Opcodes.h"
 typedef struct _Registers{
 	int32_t gpregisters[32];
 	int32_t pc;

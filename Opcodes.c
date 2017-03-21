@@ -1,7 +1,18 @@
 #include "Opcodes.h"
-//standard opcodes
-void rtype(MipsMachine* mac, _INST_WORD opcode){
 
+//standard opcodes
+void intializeRType(){
+	rtypelookup[_ADD]  = add;
+	rtypelookup[_SUB]  = sub;
+	rtypelookup[_AND]  = r_and;
+	rtypelookup[_OR]   = ror;
+	rtypelookup[_SLL]  = sll;
+	rtypelookup[_SRL]  = srl;
+	rtypelookup[_JR]   = jumpReg;
+	rtypelookup[_TRAP] = sysCall;
+}
+void rtype(MipsMachine* mac, _INST_WORD opcode){
+	
 }
 void loadWord(MipsMachine* mac, _INST_WORD opcode){
 
@@ -12,22 +23,54 @@ void storeWord(MipsMachine* mac, _INST_WORD opcode){
 void andI(MipsMachine* mac, _INST_WORD opcode){
 
 }
-void orI(MipsMachine*, _INST_WORD);
-void luI(MipsMachine*, _INST_WORD);
-void branchEQ(MipsMachine*, _INST_WORD);
-void branchNEQ(MipsMachine*, _INST_WORD);
-void setIfLessThanI(MipsMachine*, _INST_WORD);
-void addI(MipsMachine*, _INST_WORD);
-void jump(MipsMachine*, _INST_WORD);
-void jumpAndLink(MipsMachine*, _INST_WORD);
+void orI(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void luI(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void branchEQ(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void branchNEQ(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void setIfLessThanI(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void addI(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void jump(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void jumpAndLink(MipsMachine* mac, _INST_WORD opcode){
+
+}
 
 //rtpe FUNC codes
-void add(MipsMachine*, _INST_WORD);
-void sub(MipsMachine*, _INST_WORD);
-void and(MipsMachine*, _INST_WORD);
-void or(MipsMachine*, _INST_WORD);
-void sll(MipsMachine*, _INST_WORD);
-void srl(MipsMachine*, _INST_WORD);
-void jumpReg(MipsMachine*, _INST_WORD);
-void sysCall(MipsMachine*, _INST_WORD);
+void add(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void sub(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void r_and(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void ror(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void sll(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void srl(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void jumpReg(MipsMachine* mac, _INST_WORD opcode){
+
+}
+void sysCall(MipsMachine* mac, _INST_WORD opcode){
+
+}
 
