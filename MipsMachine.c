@@ -1,10 +1,13 @@
-#include "Common.h""
+#include "MipsMachine.h"
+#include "Opcodes.h"
+int memSize = 67108864;
 MipsMachine* machine_create(){
 	MipsMachine* mac = malloc(sizeof(MipsMachine));
 	mac->rf = malloc(sizeof(RegFile));
-	mac->mem = mem_Create(67108864);
+	mac->mem =memCreate(memSize);
 	return mac;
 }
+
 void startsim(MipsMachine* machine, FILE* file){
 	//intialize opcode lookup table
 	oplookup[_RTYPE] = rtype;

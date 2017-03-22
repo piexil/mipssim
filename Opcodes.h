@@ -1,6 +1,5 @@
 #ifndef OPCODES_H
 #define OPCODES_H
-#include "Common.h"
 #include "MipsMachine.h"
 void (*rtypelookup[64])(MipsMachine*, _INST_WORD);
 //standard opcodes

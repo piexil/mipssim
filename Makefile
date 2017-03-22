@@ -1,6 +1,6 @@
-CC=clang
+CC=gcc
 CFLAGS= -g -Wall
-SRC = mips.c MipsMachine.c Opcodes.c 
+SRC = mips.c MipsMachine.c Opcodes.c VirtualMemory.c
 OBJ = $(SRC: .c=.o)
 OUT = mips
 
