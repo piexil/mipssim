@@ -4,7 +4,7 @@
 VirtualMem* memCreate(int byteMemSize){
     VirtualMem* mem = malloc(sizeof(VirtualMem));
     if(mem){
-        mem->addressable.bytemem = malloc(sizeof(byteMemSize));
+        mem->addressable.bytemem = malloc(byteMemSize);
         if(!mem->addressable.bytemem){
             free(mem);
             printf("Error allocating memory.\n");

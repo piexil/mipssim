@@ -19,6 +19,10 @@ int main(int argc, char* argv[]){
 	}
 	printf("Starting simulation\n");
 	MipsMachine* machine = machine_create();
+	printf("Machine Created.\n");
+	initRegisters(machine);
+	printf("Registers Intialized\n");
+	
 	if(machine){
 		startsim(machine, fin);
 	}

@@ -1,6 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
+
 #include <stdint.h>
+
 typedef int32_t _DATA_WORD;
 typedef uint32_t _UDATA_WORD;
 typedef int32_t _INST_WORD;
