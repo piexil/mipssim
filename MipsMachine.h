@@ -22,12 +22,6 @@ typedef struct _Registers{
 	};
 } RegFile;
 
-typedef struct _MipsMachine{
-	RegFile* rf;
-	VirtualMem* mem;
-	int limit;
-} MipsMachine;
-
 typedef struct _exec {
 	uint16_t magic;
 	uint16_t version;
@@ -36,9 +30,18 @@ typedef struct _exec {
 	uint32_t data[10];
 } exec;
 
+typedef struct _MipsMachine{
+	RegFile* rf;
+	VirtualMem* mem;
+	int limit;
+} MipsMachine;
+
+
+
 void (*oplookup[64])(MipsMachine*,_INST_WORD);
 
 MipsMachine* machine_create();
 void initRegisters(MipsMachine*);
-void 	startsim(MipsMachine*,FILE*);
+void startsim(MipsMachine*,FILE*);
+void execute(MipsMachine*,_INST_WORD);
 #endif

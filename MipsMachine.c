@@ -1,6 +1,8 @@
 
 #include <stdio.h>
+#include <inttypes.h>
 #include "MipsMachine.h"
+#include"VirtualMemory.h"
 #include "Opcodes.h"
 
 int memSize = 67108864;
@@ -52,9 +54,14 @@ void startsim(MipsMachine* machine, FILE* file){
     excte->data[9] = ntohl(excte->data[9]);
 	if(excte->magic != 0xFACE){
 		fprintf(stderr,"error: file is not R2K obj module (MN: 0x%04x)\n",excte->magic);
+		return;
 	}
-	printf("version: %u\n",excte->version);
-	printf("flags: %u\n",excte->flags);
+	int year = (excte->version>>9)+2000;
+	int month = (excte->version&0x1E0) >> 5;
+	int day = (excte->version&0x01F);
+	printf("version: %d/%d/%d\n",year,month,day);
+	printf("flags: %x\n",excte->flags);
+	printf("entry: %x\n",excte->version);
 	printf("text: %u\n",excte->data[0]);
 	printf("rdata: %u\n",excte->data[1]);
 	printf("data: %u\n",excte->data[2]);
@@ -63,10 +70,20 @@ void startsim(MipsMachine* machine, FILE* file){
 	printf("ext ref: %u\n",excte->data[5]);
 	printf("sym: %u\n",excte->data[6]);
 	printf("string: %u\n",excte->data[7]);
-	//start executing
+	machine->rf->pc=0x00400000;
+	int offset = 13 * 4;
+	for(int i = 0; i < excte->data[0]; i++){
+		fseek(file,offset,SEEK_SET);
+		uint32_t curWord;
+		fread(&curWord,sizeof(uint32_t),1,file);
+		printf("loading: %"PRIu32"\n",curWord);
+		vmem_set_word(machine->mem,0x00400000+i,curWord);
+		offset += 4;
+	}
+		execute(machine,vmem_get_word(machine->mem,0x00400000));
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
-
+	printf("opcode: %"PRIu32"\n",opcode);
 }
 
