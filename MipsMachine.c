@@ -76,8 +76,8 @@ void startsim(MipsMachine* machine, FILE* file){
 		fseek(file,offset,SEEK_SET);
 		uint32_t curWord;
 		fread(&curWord,sizeof(uint32_t),1,file);
-		printf("loading: %"PRIu32"\n",curWord);
-		vmem_set_word(machine->mem,0x00400000+i,curWord);
+		printf("loading: %"PRIu32"\n",ntohl(curWord));
+		vmem_set_word(machine->mem,0x00400000+i,ntohl(curWord));
 		offset += 4;
 	}
 		execute(machine,vmem_get_word(machine->mem,0x00400000));
