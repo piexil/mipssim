@@ -28,6 +28,14 @@ typedef struct _MipsMachine{
 	int limit;
 } MipsMachine;
 
+typedef struct _exec {
+	uint16_t magic;
+	uint16_t version;
+	uint32_t flags;	
+	uint32_t entry;
+	uint32_t data[10];
+} exec;
+
 void (*oplookup[64])(MipsMachine*,_INST_WORD);
 
 MipsMachine* machine_create();

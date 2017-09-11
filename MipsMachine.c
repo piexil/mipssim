@@ -34,29 +34,39 @@ void startsim(MipsMachine* machine, FILE* file){
 	//load file into memory
 	printf("Loading File into Memory\n");
 	int numData, numInstruct = -1;
-	exec_t * exec = malloc(sozeof(exec_t));
-	fread(exec,sizeof(exec_t),1,file);
-	exec->magic = ntohs(exec->magic);
-	exec->version = ntohs(exec->version);
-    exec->flags = ntohl(exec->flags);
-    exec->entry = ntohl(exec->entry);
-    exec->data[0] = ntohl(exec->data[0]);
-    exec->data[1] = ntohl(exec->data[1]);
-    exec->data[2] = ntohl(exec->data[2]);
-    exec->data[3] = ntohl(exec->data[3]);
-    exec->data[4] = ntohl(exec->data[4]);
-    exec->data[5] = ntohl(exec->data[5]);
-    exec->data[6] = ntohl(exec->data[6]);
-    exec->data[7] = ntohl(exec->data[7]);
-    exec->data[8] = ntohl(exec->data[8]);
-    exec->data[9] = ntohl(exec->data[9]);
-	if(exec->magic != oxFACE){
-		fprintf(stderr,"error: file is not R2K obj module (MN: 0x%04x)\n",exec-magic);
+	exec *excte = malloc(sizeof(exec));
+	fread(excte,sizeof(exec),1,file);
+	excte->magic = ntohs(excte->magic);
+	excte->version = ntohs(excte->version);
+    excte->flags = ntohl(excte->flags);
+    excte->entry = ntohl(excte->entry);
+    excte->data[0] = ntohl(excte->data[0]);
+    excte->data[1] = ntohl(excte->data[1]);
+    excte->data[2] = ntohl(excte->data[2]);
+    excte->data[3] = ntohl(excte->data[3]);
+    excte->data[4] = ntohl(excte->data[4]);
+    excte->data[5] = ntohl(excte->data[5]);
+    excte->data[6] = ntohl(excte->data[6]);
+    excte->data[7] = ntohl(excte->data[7]);
+    excte->data[8] = ntohl(excte->data[8]);
+    excte->data[9] = ntohl(excte->data[9]);
+	if(excte->magic != 0xFACE){
+		fprintf(stderr,"error: file is not R2K obj module (MN: 0x%04x)\n",excte->magic);
 	}
-	prinft("")
+	printf("version: %u\n",excte->version);
+	printf("flags: %u\n",excte->flags);
+	printf("text: %u\n",excte->data[0]);
+	printf("rdata: %u\n",excte->data[1]);
+	printf("data: %u\n",excte->data[2]);
+	printf("sdata: %u\n",excte->data[3]);
+	printf("rel: %u\n",excte->data[4]);
+	printf("ext ref: %u\n",excte->data[5]);
+	printf("sym: %u\n",excte->data[6]);
+	printf("string: %u\n",excte->data[7]);
 	//start executing
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
+
 }
 
