@@ -34,7 +34,7 @@ typedef int32_t _INST_WORD;
 #define	_JAL	0x3
 
 //Addresses
-#define    RESERVED_LO_B 0x00000000
+#define    RESERVED_LO_B     0x00000000
 #define    RESERVED_LO_END   0x003fffff
 
 #define    TEXT_BEGIN        0x00400000

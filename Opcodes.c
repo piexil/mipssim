@@ -12,13 +12,13 @@ void intializeRType(){
 	rtypelookup[_TRAP] = sysCall;
 }
 void rtype(MipsMachine* mac, _INST_WORD opcode){
-	
+	fprintf(stderr,"rtype");
 }
 void loadWord(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"loadword");
 }
 void storeWord(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"storeword");
 }
 void andI(MipsMachine* mac, _INST_WORD opcode){
 

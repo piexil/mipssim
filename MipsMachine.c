@@ -34,7 +34,7 @@ void startsim(MipsMachine* machine, FILE* file){
 	oplookup[_J] = jump;
 	oplookup[_JAL] = jumpAndLink; 
 	//load file into memory
-	printf("Loading File into Memory\n");
+	fprintf(stderr,"Loading File into Memory\n");
 	int numData, numInstruct = -1;
 	exec *excte = malloc(sizeof(exec));
 	fread(excte,sizeof(exec),1,file);
@@ -59,31 +59,37 @@ void startsim(MipsMachine* machine, FILE* file){
 	int year = (excte->version>>9)+2000;
 	int month = (excte->version&0x1E0) >> 5;
 	int day = (excte->version&0x01F);
-	printf("version: %d/%d/%d\n",year,month,day);
-	printf("flags: %x\n",excte->flags);
-	printf("entry: %x\n",excte->version);
-	printf("text: %u\n",excte->data[0]);
-	printf("rdata: %u\n",excte->data[1]);
-	printf("data: %u\n",excte->data[2]);
-	printf("sdata: %u\n",excte->data[3]);
-	printf("rel: %u\n",excte->data[4]);
-	printf("ext ref: %u\n",excte->data[5]);
-	printf("sym: %u\n",excte->data[6]);
-	printf("string: %u\n",excte->data[7]);
-	machine->rf->pc=0x00400000;
+	fprintf(stderr,"version: %d/%d/%d\n",year,month,day);
+	fprintf(stderr,"flags: %x\n",excte->flags);
+	fprintf(stderr,"entry: %x\n",excte->entry);
+	fprintf(stderr,"text: %u\n",excte->data[0]);
+	fprintf(stderr,"rdata: %u\n",excte->data[1]);
+	fprintf(stderr,"data: %u\n",excte->data[2]);
+	fprintf(stderr,"sdata: %u\n",excte->data[3]);
+	fprintf(stderr,"rel: %u\n",excte->data[4]);
+	fprintf(stderr,"ext ref: %u\n",excte->data[5]);
+	fprintf(stderr,"sym: %u\n",excte->data[6]);
+	fprintf(stderr,"string: %u\n",excte->data[7]);
+	machine->rf->pc=excte->entry;
 	int offset = 13 * 4;
 	for(int i = 0; i < excte->data[0]; i++){
 		fseek(file,offset,SEEK_SET);
 		uint32_t curWord;
 		fread(&curWord,sizeof(uint32_t),1,file);
-		printf("loading: %"PRIu32"\n",ntohl(curWord));
-		vmem_set_word(machine->mem,0x00400000+i,ntohl(curWord));
+		fprintf(stderr,"loading: %"PRIx32"\n",ntohl(curWord));
+		vmem_set_word(machine->mem,TEXT_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}
-		execute(machine,vmem_get_word(machine->mem,0x00400000));
+	{
+		execute(machine,vmem_get_word(machine->mem,machine->rf->pc));
+	}
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
-	printf("opcode: %"PRIu32"\n",opcode);
+	fprintf(stderr,"opcode: %"PRIx32"\n",opcode);
+	uint32_t op = (opcode&0xFC000000)>>26;
+	fprintf(stderr,"operation: %"PRIx32"\n",op);
+	(*oplookup[op])(mac,opcode);
+
 }
 
