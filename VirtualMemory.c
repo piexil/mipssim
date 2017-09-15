@@ -1,6 +1,7 @@
 #include "VirtualMemory.h"
 #include <stdio.h>
 #include <stdlib.h>
+#define byte_word(vm,p) *((_DATA_WORD*)(vm->addressable.bytemem + p))
 VirtualMem* memCreate(int byteMemSize){
     VirtualMem* mem = malloc(sizeof(VirtualMem));
     if(mem){
@@ -21,8 +22,8 @@ void mem_destroy(VirtualMem* vm){
 }
 
 void vmem_set_word(VirtualMem* vm, int position, _DATA_WORD val){
-    vm->addressable.mem[position]=val;
+    byte_word(vm,position) = val;
 }
 _DATA_WORD vmem_get_word(VirtualMem* vm, int position){
-    return vm->addressable.mem[position];
+    return byte_word(vm,position);
 }

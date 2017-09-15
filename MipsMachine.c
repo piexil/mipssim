@@ -33,9 +33,9 @@ void startsim(MipsMachine* machine, FILE* file){
 	oplookup[_ADDI] = addI;
 	oplookup[_J] = jump;
 	oplookup[_JAL] = jumpAndLink; 
+	intializeRType();
 	//load file into memory
 	fprintf(stderr,"Loading File into Memory\n");
-	int numData, numInstruct = -1;
 	exec *excte = malloc(sizeof(exec));
 	fread(excte,sizeof(exec),1,file);
 	excte->magic = ntohs(excte->magic);
@@ -62,21 +62,18 @@ void startsim(MipsMachine* machine, FILE* file){
 	fprintf(stderr,"version: %d/%d/%d\n",year,month,day);
 	fprintf(stderr,"flags: %x\n",excte->flags);
 	fprintf(stderr,"entry: %x\n",excte->entry);
-	fprintf(stderr,"text: %u\n",excte->data[0]);
-	fprintf(stderr,"rdata: %u\n",excte->data[1]);
-	fprintf(stderr,"data: %u\n",excte->data[2]);
-	fprintf(stderr,"sdata: %u\n",excte->data[3]);
-	fprintf(stderr,"rel: %u\n",excte->data[4]);
-	fprintf(stderr,"ext ref: %u\n",excte->data[5]);
-	fprintf(stderr,"sym: %u\n",excte->data[6]);
-	fprintf(stderr,"string: %u\n",excte->data[7]);
+	fprintf(stderr,"text: %u entries\n",excte->data[0]);
+	fprintf(stderr,"rdata: %u entries\n",excte->data[1]);
+	fprintf(stderr,"data: %u entries\n",excte->data[2]);
+	fprintf(stderr,"sdata: %u entries\n",excte->data[3]);
 	machine->rf->pc=excte->entry;
 	int offset = 13 * 4;
+	_DATA_WORD curWord = 0;
 	for(int i = 0; i < excte->data[0]; i++){
+		curWord = 0;
 		fseek(file,offset,SEEK_SET);
-		uint32_t curWord;
-		fread(&curWord,sizeof(uint32_t),1,file);
-		fprintf(stderr,"loading: %"PRIx32"\n",ntohl(curWord));
+		fread(&curWord,sizeof(_DATA_WORD),1,file);
+		fprintf(stderr,"loading: %"PRIx32" @ %"PRIx32"\n",ntohl(curWord),TEXT_BEGIN+(i*4));
 		vmem_set_word(machine->mem,TEXT_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}

@@ -1,5 +1,5 @@
 #include "Opcodes.h"
-
+#include <inttypes.h>
 //standard opcodes
 void intializeRType(){
 	rtypelookup[_ADD]  = add;
@@ -11,11 +11,23 @@ void intializeRType(){
 	rtypelookup[_JR]   = jumpReg;
 	rtypelookup[_TRAP] = sysCall;
 }
+iType* itypeDecode(_INST_WORD opcode){
+	iType* itypeRet = malloc(sizeof(iType));
+	itypeRet->opcode = (opcode&0xFC000000)>>26;
+	itypeRet->rs = (opcode&0x03E00000)>>21;
+	fprintf(stderr,"$rs: %"PRIu32" ",itypeRet->rs);
+	itypeRet->rt = (opcode&0x001F0000)>>16;
+	fprintf(stderr,"$rt: %"PRIu32" ",itypeRet->rt);
+	itypeRet->immediate = (opcode&0x0000FFFF);
+	fprintf(stderr,"i: %"PRIx32" ",itypeRet->immediate);
+	return itypeRet;
+}
 void rtype(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"rtype");
 }
 void loadWord(MipsMachine* mac, _INST_WORD opcode){
-	fprintf(stderr,"loadword");
+	fprintf(stderr,"loadword\n");
+	iType* instruction = itypeDecode(opcode);
 }
 void storeWord(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"storeword");
