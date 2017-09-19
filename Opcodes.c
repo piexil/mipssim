@@ -28,6 +28,11 @@ void rtype(MipsMachine* mac, _INST_WORD opcode){
 void loadWord(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"loadword\n");
 	iType* instruction = itypeDecode(opcode);
+	uint32_t address = mac->rf->gpregisters[instruction->rs] + instruction->immediate;
+	_DATA_WORD word = vmem_get_word(mac->mem,address);
+	mac->rf->gpregisters[instruction->rt] = word;
+	free(instruction);
+	mac->rf->pc+=4;
 }
 void storeWord(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"storeword");

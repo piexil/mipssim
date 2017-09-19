@@ -5,7 +5,7 @@
 #include"VirtualMemory.h"
 #include "Opcodes.h"
 
-int memSize = 67108864;
+int memSize = 0x7FFFFFFF;
 MipsMachine* machine_create(){
 	MipsMachine* mac = malloc(sizeof(MipsMachine));
 	mac->rf = malloc(sizeof(RegFile));
@@ -69,15 +69,25 @@ void startsim(MipsMachine* machine, FILE* file){
 	machine->rf->pc=excte->entry;
 	int offset = 13 * 4;
 	_DATA_WORD curWord = 0;
+	//load the text
 	for(int i = 0; i < excte->data[0]; i++){
 		curWord = 0;
 		fseek(file,offset,SEEK_SET);
 		fread(&curWord,sizeof(_DATA_WORD),1,file);
-		fprintf(stderr,"loading: %"PRIx32" @ %"PRIx32"\n",ntohl(curWord),TEXT_BEGIN+(i*4));
+		fprintf(stderr,"loading inst: %"PRIx32" @0x%"PRIx32"\n",ntohl(curWord),TEXT_BEGIN+(i*4));
 		vmem_set_word(machine->mem,TEXT_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}
-	{
+	int totaldata = excte->data[1]+excte->data[2]+excte->data[3];
+	for(int i = 0; i < totaldata; i++){
+		curWord = 0;
+		fseek(file,offset,SEEK_SET);
+		fread(&curWord,sizeof(_DATA_WORD),1,file);
+		fprintf(stderr,"loading data: %"PRIx32" @0x%"PRIx32"\n",ntohl(curWord),DATA_BEGIN+(i*4));
+		vmem_set_word(machine->mem,DATA_BEGIN+(i*4),ntohl(curWord));
+		offset += 4;
+	}
+	for(int i = 0; i < 8; i++){
 		execute(machine,vmem_get_word(machine->mem,machine->rf->pc));
 	}
 }
