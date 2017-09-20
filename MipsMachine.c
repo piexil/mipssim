@@ -40,7 +40,7 @@ void startsim(MipsMachine* machine, FILE* file){
 	fread(excte,sizeof(exec),1,file);
 	excte->magic = ntohs(excte->magic);
 	excte->version = ntohs(excte->version);
-    excte->flags = ntohl(excte->flags);
+	excte->flags = ntohl(excte->flags);
     excte->entry = ntohl(excte->entry);
     excte->data[0] = ntohl(excte->data[0]);
     excte->data[1] = ntohl(excte->data[1]);
@@ -78,7 +78,9 @@ void startsim(MipsMachine* machine, FILE* file){
 		vmem_set_word(machine->mem,TEXT_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}
+	//calculate amount of data
 	int totaldata = excte->data[1]+excte->data[2]+excte->data[3];
+	//load data
 	for(int i = 0; i < totaldata; i++){
 		curWord = 0;
 		fseek(file,offset,SEEK_SET);

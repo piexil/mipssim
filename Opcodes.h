@@ -9,6 +9,7 @@ typedef struct _decoded_opcode_rtrype {
     unsigned short rt;
     unsigned short rd;
     unsigned short shiftAmount;
+    unsigned short function;
    
 } rType;
 typedef struct _decoded_opcode_itype {
