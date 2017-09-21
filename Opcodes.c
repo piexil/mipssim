@@ -1,5 +1,6 @@
 #include "Opcodes.h"
 #include <inttypes.h>
+#include <stdio.h>
 //standard opcodes
 void intializeRType(){
 	rtypelookup[_ADD]  = add;
@@ -61,12 +62,33 @@ void loadWord(MipsMachine* mac, _INST_WORD opcode){
 }
 void storeWord(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"storeword");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t address = mac->rf->gpregisters[instruction->rs] + instruction->immediate;
+	_DATA_WORD word = mac->rf->gpregisters[instruction->rt];
+	vmem_set_word(mac->mem,address,word);
+	free(instruction);
+	mac->rf->pc += 4;
 }
 void andI(MipsMachine* mac, _INST_WORD opcode){
+	fprintf(stderr,"andi\n");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t rt = instruction->rt;
+	uint32_t rs = instruction->rs;
+	uint32_t im = instruction->immediate;
+	mac->rf->gpregisters[rt] = mac->rf->gpregisters[rs]&im;
+	free(instruction);
+	mac->rf->pc += 4;	
 
 }
 void orI(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"ori\n");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t rt = instruction->rt;
+	uint32_t rs = instruction->rs;
+	uint32_t im = instruction->immediate;
+	mac->rf->gpregisters[rt] = mac->rf->gpregisters[rs]|im;
+	free(instruction);
+	mac->rf->pc += 4;	
 }
 void luI(MipsMachine* mac, _INST_WORD opcode){
 
@@ -81,16 +103,26 @@ void setIfLessThanI(MipsMachine* mac, _INST_WORD opcode){
 
 }
 void addI(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"addi\n");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t rt = instruction->rt;
+	uint32_t rs = instruction->rs;
+	uint32_t im = instruction->immediate;
+	mac->rf->gpregisters[rt] = mac->rf->gpregisters[rs]+im;
+	free(instruction);
+	mac->rf->pc += 4;
 }
 void jump(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"jump\n");
+	jumpType* instruction = jumptypeDecode(opcode);
+	mac->rf->pc = (mac->rf->pc & 0xF0000000) | (instruction->address); //jumpa ddress is absolute
+	free(instruction);
 }
 void jumpAndLink(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"jump and link\n");
 	jumpType* instruction = jumptypeDecode(opcode);
-	mac->rf->gpregisters[31]=mac->rf->pc + 8;
-	mac->rf->pc = (mac->rf->pc & 0xF0000000) | (instruction->address);
+	mac->rf->gpregisters[31]=mac->rf->pc + 4;
+	mac->rf->pc = (mac->rf->pc & 0xF0000000) | (instruction->address); //jumpa ddress is absolute
 	free(instruction);
 }
 
@@ -102,6 +134,7 @@ void add(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]+mac->rf->gpregisters[rt];
+	free(instr);
 }
 void sub(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"sub\n");
@@ -110,6 +143,7 @@ void sub(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]-mac->rf->gpregisters[rt];
+	free(instr);
 }
 void r_and(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"and\n");
@@ -118,6 +152,7 @@ void r_and(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]&mac->rf->gpregisters[rt];
+	free(instr);
 }
 void ror(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"or\n");
@@ -126,6 +161,7 @@ void ror(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]|mac->rf->gpregisters[rt];
+	free(instr);
 }
 void sll(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"shift left logical\n");
@@ -133,14 +169,39 @@ void sll(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rd = instr->rd;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rt]<<instr->shiftAmount;
+	free(instr);
 }
 void srl(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"shift right logical\n");
+	rType* instr = rtypeDecode(opcode);
+	uint32_t rd = instr->rd;
+	uint32_t rt = instr->rt;
+	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rt]>>instr->shiftAmount;
+	free(instr);
 }
 void jumpReg(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"shift right logical\n");
+	rType* instr = rtypeDecode(opcode);
+	mac->rf->pc=mac->rf->gpregisters[instr->rs];
+	free(instr);
 }
 void sysCall(MipsMachine* mac, _INST_WORD opcode){
-
+	switch(mac->rf->gpregisters[2]){	//switch on $v0
+		case 1:							//print int $a0
+			printf("%"PRIu32"",mac->rf->gpregisters[4]);
+			break;
+		case 4:{							//string
+			char *p = mac->mem->addressable.bytemem;
+			for(p = mac->mem->addressable.bytemem + mac->rf->gpregisters[4]; *p != '\0'; p++){
+				printf("%c\n",*p);
+			}
+			break;
+		}
+		case 5:							//read int
+			break;
+		default:
+			fprintf(stderr, "Unimplemented SYSCALL\n");
+			exit(1);
+	}
 }
 

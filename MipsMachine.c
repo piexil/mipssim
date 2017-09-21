@@ -95,7 +95,7 @@ void startsim(MipsMachine* machine, FILE* file){
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
-	fprintf(stderr,"opcode: %"PRIx32"\n",opcode);
+	fprintf(stderr,"opcode: %"PRIx32"@0x%"PRIx32"\n",opcode,mac->rf->pc);
 	uint32_t op = (opcode&0xFC000000)>>26;
 	fprintf(stderr,"operation: %"PRIx32"\n",op);
 	(*oplookup[op])(mac,opcode);
