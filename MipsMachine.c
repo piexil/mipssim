@@ -41,17 +41,17 @@ void startsim(MipsMachine* machine, FILE* file){
 	excte->magic = ntohs(excte->magic);
 	excte->version = ntohs(excte->version);
 	excte->flags = ntohl(excte->flags);
-    excte->entry = ntohl(excte->entry);
-    excte->data[0] = ntohl(excte->data[0]);
-    excte->data[1] = ntohl(excte->data[1]);
-    excte->data[2] = ntohl(excte->data[2]);
-    excte->data[3] = ntohl(excte->data[3]);
-    excte->data[4] = ntohl(excte->data[4]);
-    excte->data[5] = ntohl(excte->data[5]);
-    excte->data[6] = ntohl(excte->data[6]);
-    excte->data[7] = ntohl(excte->data[7]);
-    excte->data[8] = ntohl(excte->data[8]);
-    excte->data[9] = ntohl(excte->data[9]);
+	excte->entry = ntohl(excte->entry);
+	excte->data[0] = ntohl(excte->data[0]);
+	excte->data[1] = ntohl(excte->data[1]);
+	excte->data[2] = ntohl(excte->data[2]);
+	excte->data[3] = ntohl(excte->data[3]);
+	excte->data[4] = ntohl(excte->data[4]);
+	excte->data[5] = ntohl(excte->data[5]);
+	excte->data[6] = ntohl(excte->data[6]);
+	excte->data[7] = ntohl(excte->data[7]);
+	excte->data[8] = ntohl(excte->data[8]);
+	excte->data[9] = ntohl(excte->data[9]);
 	if(excte->magic != 0xFACE){
 		fprintf(stderr,"error: file is not R2K obj module (MN: 0x%04x)\n",excte->magic);
 		return;
