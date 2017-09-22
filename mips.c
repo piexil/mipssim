@@ -5,7 +5,7 @@
 #include "MipsMachine.h"
 #include "Common.h"
 int main(int argc, char* argv[]){
-	printf("MIPS Simulator written by piexil\n");
+	printf("MIPS Simulator\n");
 	fprintf(stderr,"_DATA_WORD %lu \n", sizeof(_DATA_WORD));
 	fprintf(stderr,"_INST_WORD %lu \n", sizeof(_INST_WORD));
 	FILE* fin = NULL;

@@ -9,7 +9,7 @@ int memSize = 0x7FFFFFFF;
 MipsMachine* machine_create(){
 	MipsMachine* mac = malloc(sizeof(MipsMachine));
 	mac->rf = malloc(sizeof(RegFile));
-	mac->mem =memCreate(memSize);
+	mac->mem = memCreate(memSize);
 	return mac;
 }
 
@@ -17,6 +17,7 @@ void initRegisters(MipsMachine* m){
 	for(int i = 0; i < 32; i++){
 		m->rf->gpregisters[i] = 0;
 	}
+	m->rf->gpregisters[29]=STACK_BEGIN; //intialize stack pointer
 	m->rf->pc = m->rf->ir = 0;
 	m->rf->hilo = 0;
 }
@@ -24,6 +25,7 @@ void startsim(MipsMachine* machine, FILE* file){
 	//intialize opcode lookup table
 	oplookup[_RTYPE] = rtype;
 	oplookup[_LW] = loadWord;
+	oplookup[_SW] = storeWord;
 	oplookup[_ANDI] = andI;
 	oplookup[_ORI] = orI;
 	oplookup[_LUI] = luI;

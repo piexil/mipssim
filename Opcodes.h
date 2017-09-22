@@ -1,6 +1,6 @@
 #ifndef OPCODES_H
 #define OPCODES_H
-
+#define sExt(x) (int32_t)x 
 #include "MipsMachine.h"
 
 typedef struct _decoded_opcode_rtrype {
@@ -16,7 +16,7 @@ typedef struct _decoded_opcode_itype {
     unsigned short opcode;
     unsigned short rs;
     unsigned short rt;
-    uint16_t immediate;
+    int16_t immediate;
 } iType;
 typedef struct _decoded_opcode_jump{
     unsigned short opcode;
@@ -51,6 +51,7 @@ void sll(MipsMachine*, _INST_WORD);
 void srl(MipsMachine*, _INST_WORD);
 void jumpReg(MipsMachine*, _INST_WORD);
 void sysCall(MipsMachine*, _INST_WORD);
+void setLessThanU(MipsMachine* mac, _INST_WORD opcode);
 
 void intializeRType();
 #endif
