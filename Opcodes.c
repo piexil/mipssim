@@ -48,8 +48,10 @@ jumpType* jumptypeDecode(_INST_WORD opcode){
 }
 void rtype(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"rtype\n");
-	int32_t func = (opcode&0x0000003F);
-	(*rtypelookup[func])(mac,opcode);
+	rType* instr = rtypeDecode(opcode);
+	fprintf(stderr,"func: %"PRIx32"\n",instr->function);
+	(*rtypelookup[instr->function])(mac,instr);
+	free(instr);
 	mac->rf->pc+=4;
 }
 void loadWord(MipsMachine* mac, _INST_WORD opcode){
@@ -145,73 +147,61 @@ void jumpAndLink(MipsMachine* mac, _INST_WORD opcode){
 }
 
 //rtpe FUNC codes
-void add(MipsMachine* mac, _INST_WORD opcode){
+void add(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"add\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]+mac->rf->gpregisters[rt];
-	free(instr);
 }
-void sub(MipsMachine* mac, _INST_WORD opcode){
+void sub(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"sub\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]-mac->rf->gpregisters[rt];
-	free(instr);
 }
-void r_and(MipsMachine* mac, _INST_WORD opcode){
+void r_and(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"and\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]&mac->rf->gpregisters[rt];
-	free(instr);
 }
-void ror(MipsMachine* mac, _INST_WORD opcode){
+void ror(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"or\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]|mac->rf->gpregisters[rt];
-	free(instr);
 }
-void sll(MipsMachine* mac, _INST_WORD opcode){
+void sll(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"shift left logical\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rt]<<instr->shiftAmount;
-	free(instr);
 }
-void srl(MipsMachine* mac, _INST_WORD opcode){
+void srl(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"shift right logical\n");
-	rType* instr = rtypeDecode(opcode);
 	uint32_t rd = instr->rd;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rt]>>instr->shiftAmount;
-	free(instr);
 }
-void jumpReg(MipsMachine* mac, _INST_WORD opcode){
+void jumpReg(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"shift right logical\n");
-	rType* instr = rtypeDecode(opcode);
 	mac->rf->pc=mac->rf->gpregisters[instr->rs];
-	free(instr);
 }
-void sysCall(MipsMachine* mac, _INST_WORD opcode){
+void sysCall(MipsMachine* mac,rType* instr){
+	fprintf(stderr,"syscall\n");
 	switch(mac->rf->gpregisters[2]){	//switch on $v0
 		case 1:							//print int $a0
 			printf("%"PRIu32"",mac->rf->gpregisters[4]);
 			break;
 		case 4:{							//string
-			char *p = mac->mem->addressable.bytemem;
-			for(p = mac->mem->addressable.bytemem + mac->rf->gpregisters[4]; *p != '\0'; p++){
-				printf("%c\n",*p);
+			fprintf(stderr,"string print\n");
+			char *p = mac->mem->addressable.bytemem + mac->rf->gpregisters[4];
+			for(; *p != '\0'; p++){
+				printf("%c",*p);
 			}
 			break;
 		}

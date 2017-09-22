@@ -23,7 +23,7 @@ typedef struct _decoded_opcode_jump{
     uint32_t address;
 } jumpType;
 
-void (*rtypelookup[64])(MipsMachine*, _INST_WORD);
+void (*rtypelookup[64])(MipsMachine*,rType*);
 //opcode decoders
 rType* rtypeDecode(_INST_WORD);
 iType* itypeDecode(_INST_WORD);
@@ -41,17 +41,17 @@ void setIfLessThanI(MipsMachine*, _INST_WORD);
 void addI(MipsMachine*, _INST_WORD);
 void jump(MipsMachine*, _INST_WORD);
 void jumpAndLink(MipsMachine*, _INST_WORD);
-
-//rtpe FUNC codes
-void add(MipsMachine*, _INST_WORD);
-void sub(MipsMachine*, _INST_WORD);
-void r_and(MipsMachine*, _INST_WORD);
-void ror(MipsMachine*, _INST_WORD);
-void sll(MipsMachine*, _INST_WORD);
-void srl(MipsMachine*, _INST_WORD);
-void jumpReg(MipsMachine*, _INST_WORD);
-void sysCall(MipsMachine*, _INST_WORD);
 void setLessThanU(MipsMachine* mac, _INST_WORD opcode);
+//rtpe FUNC codes
+void add(MipsMachine*,rType*);
+void sub(MipsMachine*,rType*);
+void r_and(MipsMachine*,rType*);
+void ror(MipsMachine*,rType*);
+void sll(MipsMachine*,rType*);
+void srl(MipsMachine*,rType*);
+void jumpReg(MipsMachine*,rType*);
+void sysCall(MipsMachine*,rType*);
+
 
 void intializeRType();
 #endif
