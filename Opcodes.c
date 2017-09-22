@@ -87,13 +87,19 @@ void orI(MipsMachine* mac, _INST_WORD opcode){
 	iType* instruction = itypeDecode(opcode);
 	uint32_t rt = instruction->rt;
 	uint32_t rs = instruction->rs;
-	uint32_t im = instruction->immediate;
+	int32_t im = instruction->immediate;
 	mac->rf->gpregisters[rt] = mac->rf->gpregisters[rs]|sExt(im);
 	free(instruction);
 	mac->rf->pc += 4;	
 }
 void luI(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"lui\n");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t rt = instruction->rt;
+	int32_t im = instruction->immediate;
+	mac->rf->gpregisters[rt] = im<<16;
+	free(instruction);
+	mac->rf->pc += 4;
 }
 void branchEQ(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"beq\n");

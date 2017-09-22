@@ -91,16 +91,19 @@ void startsim(MipsMachine* machine, FILE* file){
 		vmem_set_word(machine->mem,DATA_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}
-	for(int i = 0; i < 8; i++){
+	for(int i = 0; i < 16; i++){
 		execute(machine,vmem_get_word(machine->mem,machine->rf->pc));
 	}
+	exit(EXIT_SUCCESS);
 }
 
 void execute(MipsMachine* mac, _INST_WORD opcode){
+	fprintf(stderr,"______________________________________\n");
 	fprintf(stderr,"opcode: %"PRIx32"@0x%"PRIx32"\n",opcode,mac->rf->pc);
 	uint32_t op = (opcode&0xFC000000)>>26;
 	fprintf(stderr,"operation: %"PRIx32"\n",op);
 	(*oplookup[op])(mac,opcode);
+	fprintf(stderr,"______________________________________\n");
 
 }
 
