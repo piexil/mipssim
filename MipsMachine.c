@@ -70,7 +70,7 @@ void startsim(MipsMachine* machine, FILE* file){
 	fprintf(stderr,"sdata: %u entries\n",excte->data[3]);
 	machine->rf->pc=excte->entry;
 	int offset = 13 * 4;
-	_DATA_WORD curWord = 0;
+	_UDATA_WORD curWord = 0;
 	//load the text
 	for(int i = 0; i < excte->data[0]/4; i++){
 		curWord = 0;
@@ -86,7 +86,7 @@ void startsim(MipsMachine* machine, FILE* file){
 	for(int i = 0; i < totaldata; i++){
 		curWord = 0;
 		fseek(file,offset,SEEK_SET);
-		fread(&curWord,sizeof(_DATA_WORD),1,file);
+		fread(&curWord,sizeof(_UDATA_WORD),1,file);
 		fprintf(stderr,"loading data: %"PRIx32" @0x%"PRIx32"\n",ntohl(curWord),DATA_BEGIN+(i*4));
 		vmem_set_word(machine->mem,DATA_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;

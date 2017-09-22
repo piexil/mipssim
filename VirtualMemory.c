@@ -24,6 +24,9 @@ void mem_destroy(VirtualMem* vm){
 void vmem_set_word(VirtualMem* vm, int position, _DATA_WORD val){
     byte_word(vm,position) = val;
 }
+char get_byte(VirtualMem* vm, int position){
+    return (vm->addressable.bytemem[position]);
+}
 _DATA_WORD vmem_get_word(VirtualMem* vm, int position){
     return byte_word(vm,position);
 }

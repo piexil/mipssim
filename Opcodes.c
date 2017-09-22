@@ -99,6 +99,7 @@ void luI(MipsMachine* mac, _INST_WORD opcode){
 	iType* instruction = itypeDecode(opcode);
 	uint32_t rt = instruction->rt;
 	int32_t im = instruction->immediate;
+	fprintf(stderr,"shifted immediate: %"PRIx32"\n",im<<16);
 	mac->rf->gpregisters[rt] = im<<16;
 	free(instruction);
 	mac->rf->pc += 4;
@@ -199,11 +200,12 @@ void sysCall(MipsMachine* mac,rType* instr){
 			break;
 		case 4:{							//string
 			fprintf(stderr,"string print\n");
-			char *p = mac->mem->addressable.bytemem + mac->rf->gpregisters[4];
-			for(; *p != '\0'; p++){
-				printf("%c",*p);
+			char p = ' ';
+			uint32_t address = mac->rf->gpregisters[4];
+			while(p!='\0'){
+				p = get_byte(mac->mem,address++);
+				fprintf(stdout,"%c",p);
 			}
-			break;
 		}
 		case 5:							//read int
 			break;
