@@ -11,6 +11,7 @@ typedef int32_t _INST_WORD;
 //R_TYPE
 #define  _RTYPE	0x0
 #define _ADD	0x20
+#define _ADDU   0x21
 #define _SUB	0x22
 #define _AND	0x24
 #define _OR 	0x25
@@ -20,6 +21,7 @@ typedef int32_t _INST_WORD;
 #define	_SRL	0x2
 #define	_JR	    0x8
 #define _TRAP	0xC //aka syscall
+#define _JR     0x8
 //I_TYPE
 #define _LW	    0x23
 #define	_SW 	0x2B

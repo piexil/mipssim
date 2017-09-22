@@ -71,7 +71,8 @@ void startsim(MipsMachine* machine, FILE* file){
 	machine->rf->pc=excte->entry;
 	int offset = 13 * 4;
 	_UDATA_WORD curWord = 0;
-	//load the text
+	//load the text.
+	//Done as a loop because of nothl. 
 	for(int i = 0; i < excte->data[0]/4; i++){
 		curWord = 0;
 		fseek(file,offset,SEEK_SET);
@@ -80,18 +81,10 @@ void startsim(MipsMachine* machine, FILE* file){
 		vmem_set_word(machine->mem,TEXT_BEGIN+(i*4),ntohl(curWord));
 		offset += 4;
 	}
-	//calculate amount of data
-	int totaldata = (excte->data[1]+excte->data[2]+excte->data[3])/4;
-	//load data
-	for(int i = 0; i < totaldata; i++){
-		curWord = 0;
-		fseek(file,offset,SEEK_SET);
-		fread(&curWord,sizeof(_UDATA_WORD),1,file);
-		fprintf(stderr,"loading data: %"PRIx32" @0x%"PRIx32"\n",(curWord),DATA_BEGIN+(i*4));
-		vmem_set_word(machine->mem,DATA_BEGIN+(i*4),(curWord));
-		offset += 4;
-	}
-	for(int i = 0; i < 16; i++){
+	//load the data block into memory
+	fread(machine->mem->addressable.bytemem + DATA_BEGIN,excte->data[1]+excte->data[2]+excte->data[3],1,file);
+	//execute
+	for(;;){
 		execute(machine,vmem_get_word(machine->mem,machine->rf->pc));
 	}
 	exit(EXIT_SUCCESS);

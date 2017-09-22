@@ -41,9 +41,10 @@ void setIfLessThanI(MipsMachine*, _INST_WORD);
 void addI(MipsMachine*, _INST_WORD);
 void jump(MipsMachine*, _INST_WORD);
 void jumpAndLink(MipsMachine*, _INST_WORD);
-void setLessThanU(MipsMachine* mac, _INST_WORD opcode);
+
 //rtpe FUNC codes
 void add(MipsMachine*,rType*);
+void addu(MipsMachine*,rType*);
 void sub(MipsMachine*,rType*);
 void r_and(MipsMachine*,rType*);
 void ror(MipsMachine*,rType*);
@@ -51,7 +52,7 @@ void sll(MipsMachine*,rType*);
 void srl(MipsMachine*,rType*);
 void jumpReg(MipsMachine*,rType*);
 void sysCall(MipsMachine*,rType*);
-
+void setLessThanU(MipsMachine*,rType*);
 
 void intializeRType();
 #endif

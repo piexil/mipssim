@@ -4,6 +4,7 @@
 //standard opcodes
 void intializeRType(){
 	rtypelookup[_ADD]  = add;
+	rtypelookup[_ADDU] = addu;
 	rtypelookup[_SUB]  = sub;
 	rtypelookup[_AND]  = r_and;
 	rtypelookup[_OR]   = ror;
@@ -110,17 +111,27 @@ void branchEQ(MipsMachine* mac, _INST_WORD opcode){
 	uint32_t rt = instruction->rt;
 	uint32_t rs = instruction->rs;
 	uint32_t im = instruction->immediate;
-
+	if(mac->rf->gpregisters[rs] == mac->rf->gpregisters[rt]){
+		mac->rf->pc += 4+im;
+	}
+	else{
+		mac->rf->pc += 4;
+	}
 }
 void branchNEQ(MipsMachine* mac, _INST_WORD opcode){
 
 }
 void setIfLessThanI(MipsMachine* mac, _INST_WORD opcode){
-
+	fprintf(stderr,"slti\n");
+	iType* instruction = itypeDecode(opcode);
+	uint32_t rt = instruction->rt;
+	uint32_t rs = instruction->rs;
+	uint32_t im = instruction->immediate;
+	mac->rf->gpregisters[rt] = (mac->rf->gpregisters[rs]<sExt(im)) ? 1 : 0;
+	mac->rf->pc += 4;
+	free(instruction);
 }
-void setLessThanU(MipsMachine* mac, _INST_WORD opcode){
 
-}
 void addI(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"addi\n");
 	iType* instruction = itypeDecode(opcode);
@@ -142,7 +153,7 @@ void jump(MipsMachine* mac, _INST_WORD opcode){
 void jumpAndLink(MipsMachine* mac, _INST_WORD opcode){
 	fprintf(stderr,"jump and link\n");
 	jumpType* instruction = jumptypeDecode(opcode);
-	mac->rf->gpregisters[31]=mac->rf->pc + 8;
+	mac->rf->gpregisters[31]=mac->rf->pc;
 	mac->rf->pc = ((mac->rf->pc + 4) & 0xF0000000) | (instruction->address); //jumpa ddress is absolute
 	free(instruction);
 }
@@ -154,6 +165,13 @@ void add(MipsMachine* mac,rType* instr){
 	uint32_t rs = instr->rs;
 	uint32_t rt = instr->rt;
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rs]+mac->rf->gpregisters[rt];
+}
+void addu(MipsMachine* mac,rType* instr){
+	fprintf(stderr,"add\n");
+	uint32_t rd = instr->rd;
+	uint32_t rs = instr->rs;
+	uint32_t rt = instr->rt;
+	mac->rf->gpregisters[rd]=(_UDATA_WORD)mac->rf->gpregisters[rs]+(_UDATA_WORD)mac->rf->gpregisters[rt];
 }
 void sub(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"sub\n");
@@ -189,8 +207,11 @@ void srl(MipsMachine* mac,rType* instr){
 	mac->rf->gpregisters[rd]=mac->rf->gpregisters[rt]>>instr->shiftAmount;
 }
 void jumpReg(MipsMachine* mac,rType* instr){
-	fprintf(stderr,"shift right logical\n");
-	mac->rf->pc=mac->rf->gpregisters[instr->rs];
+	fprintf(stderr,"jumpRegister\n");
+	mac->rf->pc=mac->rf->gpregisters[instr->rs];//dont forget jump register will automatically add 4 to PC after invoked
+}
+void setLessThanU(MipsMachine* mac,rType* instr){
+	
 }
 void sysCall(MipsMachine* mac,rType* instr){
 	fprintf(stderr,"syscall\n");
@@ -206,8 +227,11 @@ void sysCall(MipsMachine* mac,rType* instr){
 				p = get_byte(mac->mem,address++);
 				fprintf(stdout,"%c",p);
 			}
+			break;
 		}
 		case 5:							//read int
+			fprintf(stderr,"read int\n");	
+			scanf("%d",&mac->rf->gpregisters[2]);					
 			break;
 		default:
 			fprintf(stderr, "Unimplemented SYSCALL\n");

@@ -17,4 +17,5 @@ VirtualMem* memCreate(int byteMemSize);
 void mem_destroy(VirtualMem* vm);
 void vmem_set_word(VirtualMem* vm, int position, _DATA_WORD val);
 _DATA_WORD vmem_get_word(VirtualMem* vm, int position);
+char get_byte(VirtualMem*, int);
 #endif
